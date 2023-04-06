@@ -1,7 +1,11 @@
 from flask import Flask, jsonify
+from pymongo import MongoClient
 import json
 
 app = Flask(__name__)
+client = MongoClient('localhost', 27017)
+db = client.flask.db
+todos = db.todos
 
 @app.route("/")
 def home():
@@ -14,7 +18,7 @@ def home():
 @app.route("/api/v1.0/sightings")
 def sightings():
     lst = []
-    with open('bfro_reports.json') as file:
+    with open('bfro_geocoded.json') as file:
         for line in file:
             lst.append(json.loads(line))
         return jsonify(lst)
