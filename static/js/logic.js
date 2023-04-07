@@ -13,10 +13,29 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 var link = "http://127.0.0.1:5000/api/v1.0/sightings";
 
 
-
+// Getting JSON data
 d3.json(link).then(function(data) {
 
-     console.log(data.length)
+    console.log(data.length)
+
+    // Create a new marker cluster group.
+    var markers = L.markerClusterGroup();
+
+     for (var i = 1; i < 20; i++) {
+      
+     //Check for latitude/longitude values in JSON 
+      if (data[i].latitude) {
+        var lat = data[i].latitude
+        var long = data[i].longitude
+
+      // Add a new marker to the cluster group, and bind a popup.
+        markers.addLayer(L.marker([lat, long]))
+        //.bindPopup(data[i].number)
+      }
+    }
+
+  // Add our marker cluster layer to the map.
+  myMap.addLayer(markers);
 });
 
 // // Function to covert UNIX timestamp to datetime
