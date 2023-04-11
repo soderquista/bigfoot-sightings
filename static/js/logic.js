@@ -16,21 +16,22 @@ var link = "http://127.0.0.1:5000/api/v1.0/sightings";
 // Getting JSON data
 d3.json(link).then(function(data) {
 
-    console.log(data.length)
+    console.log(data.data.length)
 
     // Create a new marker cluster group.
     var markers = L.markerClusterGroup();
 
-     for (var i = 1; i < 20; i++) {
+     for (var i = 1; i < data.data.length; i++) {
       
      //Check for latitude/longitude values in JSON 
-      if (data[i].latitude) {
-        var lat = data[i].latitude
-        var long = data[i].longitude
-
-      // Add a new marker to the cluster group, and bind a popup.
-        markers.addLayer(L.marker([lat, long]))
-        //.bindPopup(data[i].number)
+      if (data.data[i].latitude) {
+        var lat = data.data[i].latitude
+        var long = data.data[i].longitude
+        // Add a new marker to the cluster group, and bind a popup.
+        var marker = L.marker([lat, long]);
+        markers.addLayer(marker.bindPopup(`<h3>${new Date(parseInt(data.data[i].date.$date.$numberLong)).toDateString().slice(0,15)}</h3>`+`<p>${data.data[i].title}</p>`))
+        //layer.
+        
       }
     }
 

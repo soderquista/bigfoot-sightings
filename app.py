@@ -18,6 +18,6 @@ def sightings():
 #    lst = []
     with open('bfro_geocoded.json',encoding = "utf-8") as file:
         data = json.loads(file.read())
-        return(data)
+        return({"data":data})
 if __name__ == '__main__':
     app.run(debug=True)
