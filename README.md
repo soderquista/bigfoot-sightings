@@ -1,5 +1,5 @@
 # bigfoot-sightings
-The dataset explored is the Bigfoot sightings as reported to the <a href=https://www.bfro.net/>Bigfoot Field Researchers Organization</a> (BFRO). The dataset was found on <a href=https://data.world/timothyrenner/bfro-sightings-data/workspace/file?filename=bfro_reports_geocoded.csv>data.world, uploaded by Timothy Renner</a>.
+The dataset explored is the Bigfoot sightings as reported to the <a href=https://www.bfro.net/>Bigfoot Field Researchers Organization</a> (BFRO). The dataset was found on <a href='https://data.world/timothyrenner/bfro-sightings-data/workspace/file?filename=bfro_reports_geocoded.csv'>data.world, uploaded by Timothy Renner</a>.
 
 ## Data Preparation
 Data on reported Bigfoot sightings was downloaded in a .csv and .json format. There are 5,082 records total, though data entered varies. The oldest recorded date is 1869 and data runs through 2/28/23. The bfro_reports_geocoded.csv file contains the most information about individual sightings, including:
