@@ -36,33 +36,34 @@ async function buildStatePanel(state) {
   }
 }
 
-// building sightings in state by year bar chart
+
+// building bigfoot sightings in state by county bar chart
 async function buildBarChart(state) {
   try {
+    const { data } = await fetchData(sightingsUrl);
+    const stateData = data.filter(({ state: dataState }) => dataState === state);
+    const county = stateData.map(({ county }) => county).filter(Boolean);
+    console.log(county.length);
 
-    const data = await fetchData(sightingsUrl);
-    const stateData = data.data.filter(({ state: dataState }) => dataState === state);
+    // Get a dictionary of the count of each county
+    const countDict = county.reduce((cnt, cur) => (cnt[cur] = cnt[cur] + 1 || 1, cnt), {});
 
-    //const tst = stateData[0].date.$date.$numberLong
-    //console.log(tst)
-
-    const tst2 = stateData.filter(item => item.hasOwnProperty('date'));
-    console.log(tst2)
-
-    if (tst2.length === 0) {
-      return
-    }
-
-
-    const dates = tst2.map(({ date }) => new Date(parseInt(date.$date.$numberLong)).toDateString().slice(0, 15));
-    const values = tst2.map(({ shape }) => shape);
-    const layout = { title: `State Sightings for ${state} by Year` };
-    Plotly.newPlot("bar", [{x: dates, y: values, type: "bar", orientation: "h"}], layout);
+    // Get an array of counties matched with an array of their counts
+    var counties = Object.keys(countDict);
+    var values = Object.values(countDict);
+    const layout = { 
+      title: `State Sightings for ${state} by County`,
+      xaxis: {
+        tickangle: 45
+      }
+    };
+    Plotly.newPlot("bar", [{ x: counties, y: values, type: "bar"}], layout);
   } catch (error) {
     console.error(error);
     d3.select("#error-message").text("An error occurred while loading the data. Please try again later.");
   }
-}
+};
+
 async function init() {
   const defaultState = await createDropdownMenu();
   await buildStatePanel(defaultState);
@@ -73,11 +74,11 @@ async function init() {
 // Function to build bar chart of total sightings by season
 function barChart(data) {
 
-  var spring = [];
-  var summer = [];
-  var fall = [];
-  var winter = [];
-  var season = ["Spring", "Summer", "Fall", "Winter"];
+  var spring = [],
+   summer = [],
+   fall = [],
+   winter = [],
+   season = ["Spring", "Summer", "Fall", "Winter"];
 
   for (var i = 0; i < data.data.length; i++) {
     if (data.data[i].season == "Spring") {
