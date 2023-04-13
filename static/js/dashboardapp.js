@@ -1,85 +1,79 @@
-// Get the URL endpoint
+const apiUrl = "http://127.0.0.1:5000/api/v1.0";
+const sightingsUrl = `${apiUrl}/sightings`;
 
-const url = "http://127.0.0.1:5000/api/v1.0/sightings"
-
-// Fetch the JSON data and console log it
-d3.json(url).then(function(data) {
-  console.log(data);
-});
-
-// Initialize the dashboard at start up 
-function init() {
-        // Use D3 to select the dropdown menu
-        let dropdownMenu = d3.select("#selDataset");
-
-        // Use D3 to get sample names and populate the drop-down selector
-        d3.json(url).then((data) => {
-            
-            // Set a variable for the sample state
-            let state = data[i].state;
-            let season= data[i].season;
-    
-            // Add  samples to dropdown menu
-            state.forEach((id) => {
-    
-                // Log the value of id for each iteration of the loop
-                console.log(id);
-    
-                dropdownMenu.append("option")
-                .text(id)
-                .property("value",id);
-            });
-            season.forEach((id) => {
-    
-                // Log the value of id for each iteration of the loop
-                console.log(id);
-    
-                dropdownMenu.append("option")
-                .text(id)
-                .property("value",id);
-            });
-    
-            // Set the first sample from the list
-            let sample_one = state[0];
-            let sample_two = season[0];
-    
-            // Log the value of sample_one
-            console.log(sample_one);
-            console.log(sample_two);
-                    // Build the initial plots
-        buildMetadata(sample_one);
-        buildBarChart(sample_one);
-        buildBubbleChart(sample_one);
-        buildGaugeChart(sample_one);
-
-    });
-};
-// Creating the map object
-var myMap = L.map("map", {
-    center: [37.6000, -95.6650],
-    zoom: 4.5
+async function fetchData(url) {
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error(error);
+  }
+}
+//dropdown menu
+async function createDropdownMenu() {
+  const data = await fetchData(sightingsUrl);
+  const dropdownMenu = d3.select("#selDataset");
+  const states = data.data.map(({ state }) => state);
+  const uniqueStates = [...new Set(states)];
+  uniqueStates.forEach((state) => {
+    dropdownMenu.append("option").text(state).property("value", state);
   });
-  
-  // Adding the tile layer
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href=https://www.openstreetmap.org/copyright>OpenStreetMap</a> contributors'
-  }).addTo(myMap);
-  function getColor(season) {
-    return season= "Summer" ? "#FF0D0D" :
-        season = "Winter" ? "#FF4E11" :
-        season = "Fall" ? "#FF8E15" :
-        season = "Spring" ? "#FFB92E" 
-    
-  // Drawing the circles
-function drawCircle(latitude, longitude) {
- 
-    
-    return L.circle(latitude, longitude, {
-            fillOpacity: 0.5,
-            color: getColor(depth),
-            fillColor: getColor(depth),
-            
+  return uniqueStates[0];
+}
+
+async function buildStatePanel(state) {
+  try {
+    const data = await fetchData(sightingsUrl);
+    const stateData = data.data.find(({ state: dataState }) => dataState === state);
+    const statePanel = d3.select("#sample-state");
+    statePanel.html("");
+    Object.entries(stateData).forEach(([key, value]) => {
+      statePanel.append("h5").text(`${key}: ${value}`);
     });
-  };
-  // Call the initialize function
+  } catch (error) {
+    throw new Error(error);
+  }
+}
+
+// building bar chart
+async function buildBarChart(state) {
+  try {
+
+
+
+    const data = await fetchData(sightingsUrl);
+    const stateData = data.data.filter(({ state: dataState }) => dataState === state);
+
+    //const tst = stateData[0].date.$date.$numberLong
+    //console.log(tst)
+
+    const tst2 = stateData.filter(item => item.hasOwnProperty('date'));
+    console.log(tst2)
+
+    if (tst2.length === 0) {
+      return
+    }
+
+
+    const dates = tst2.map(({ date }) => new Date(parseInt(date.$date.$numberLong)).toDateString().slice(0, 15));
+    const values = tst2.map(({ shape }) => shape);
+    const layout = { title: `State Sightings for ${state} by Year` };
+    Plotly.newPlot("bar", [{x: dates, y: values, type: "bar", orientation: "h"}], layout);
+  } catch (error) {
+    console.error(error);
+    d3.select("#error-message").text("An error occurred while loading the data. Please try again later.");
+  }
+}
+async function init() {
+  const defaultState = await createDropdownMenu();
+  await buildStatePanel(defaultState);
+  await buildBarChart(defaultState);
+}
+
+function optionChanged(state) {
+  buildStatePanel(state);
+  buildBarChart(state);
+}
+
 init();
