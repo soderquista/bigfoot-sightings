@@ -36,11 +36,9 @@ async function buildStatePanel(state) {
   }
 }
 
-// building bar chart
+// building sightings in state by year bar chart
 async function buildBarChart(state) {
   try {
-
-
 
     const data = await fetchData(sightingsUrl);
     const stateData = data.data.filter(({ state: dataState }) => dataState === state);
@@ -70,6 +68,59 @@ async function init() {
   await buildStatePanel(defaultState);
   await buildBarChart(defaultState);
 }
+
+
+// Function to build bar chart of total sightings by season
+function barChart(data) {
+
+  var spring = [];
+  var summer = [];
+  var fall = [];
+  var winter = [];
+  var season = ["Spring", "Summer", "Fall", "Winter"];
+
+  for (var i = 0; i < data.data.length; i++) {
+    if (data.data[i].season == "Spring") {
+      spring.push(data.data[i].number);
+    } else if (data.data[i].season == "Summer") {
+      summer.push(data.data[i].number);
+    } else if (data.data[i].season == "Fall") {
+      fall.push(data.data[i].number);
+    } else if (data.data[i].season == "Winter") {
+      winter.push(data.data[i].number);
+    }
+
+  };
+
+  let count = [spring.length, summer.length, fall.length, winter.length]
+
+	let trace1 = {
+		type: "bar",
+		x: season,
+		y: count
+  	};
+    
+  console.log("Spring: " + spring.length);
+  console.log("Summer: " + summer.length);
+  console.log("Fall: " + fall.length);
+  console.log("Winter: " + winter.length);
+
+	let barChart = [trace1];
+
+  let layout = {
+    title: 'Total Bigfoot Sightings by Season'
+  };
+
+	Plotly.newPlot("bubble", barChart, layout);
+
+	console.log("Bar Chart Printed")
+	
+};
+
+// Print bar chart of total sightings by season
+d3.json(sightingsUrl).then(function (data) {
+  barChart(data);
+});
 
 function optionChanged(state) {
   buildStatePanel(state);
