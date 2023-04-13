@@ -1,5 +1,4 @@
 # bigfoot-sightings
-The dataset explored is the Bigfoot sightings as reported to the <a href=https://www.bfro.net/>Bigfoot Field Researchers Organization</a> (BFRO). The dataset was found on <a href='https://data.world/timothyrenner/bfro-sightings-data/workspace/file?filename=bfro_reports_geocoded.csv'>data.world, uploaded by Timothy Renner</a>.
 
 ## Data Preparation
 Data on reported Bigfoot sightings was downloaded in a .csv and .json format. There are 5,082 records total, though data entered varies. The oldest recorded date is 1869 and data runs through 2/28/23. The bfro_reports_geocoded.csv file contains the most information about individual sightings, including:
@@ -27,6 +26,8 @@ The webpage `bigfoot-map.html` is a Leaflet map of Bigfoot sighting location rep
 The webpage `dashboard.html` is an interactive dashboard that shows the number of Bigfoot sightings in each county of each state. There is also a static graph of the number of Bigfoot sightings each season. 
 
 ### Data and Code Sources
+The dataset explored is the Bigfoot sightings as reported to the <a href=https://www.bfro.net/>Bigfoot Field Researchers Organization</a> (BFRO). The dataset was found on <a href='https://data.world/timothyrenner/bfro-sightings-data/workspace/file?filename=bfro_reports_geocoded.csv'>data.world, uploaded by Timothy Renner</a>.
+
 Unix DateTime JavaScript conversion function `convertTimestamp` based on <a href=https://stackoverflow.com/questions/24170933/convert-unix-timestamp-to-date-time-javascript>StackOverflow answer by Kamal Shooryabi 7/21/2018 and modified by Ivan 6/21/2018</a>.
 
 Code in `/static/js/dashboad.js` to get a dictionary of the count of each county is from the <a href=https://stackoverflow.com/questions/19395257/how-to-count-duplicate-value-in-an-array-in-javascript>StackOverflow answer by isnot2bad 10/1/2015</a>.
