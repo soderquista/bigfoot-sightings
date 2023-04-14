@@ -20,7 +20,9 @@ MongoDB was used to turn this .csv into a .json format that could then be upload
 Download this repository. In Terminal/Command Prompt, activate a PythonData shell and run `http:server`. Open the app.py file through Python. A web address will appear in a Terminal/Command Prompt window. Navigate to that address. The JSON data is stored at `http://127.0.0.1:5000/api/v1.0/sightings`. Leave this window open while navigating the two webpages in the repository.
 
 ## Bigfoot Sighting Map
-The webpage `bigfoot-map.html` is a Leaflet map of Bigfoot sighting location reports in the United States of America.
+The webpage `bigfoot-map.html` is a <a href = 'https://leafletjs.com/index.html'> Leaflet map </a> of Bigfoot sighting location reports in the United States of America. It uses a clustered marker visualization as the individual sightings con be located in quite dense clusters. Each individual marker also includes a popup when hovered over, providing information about the date of the sighting and a brief summary of the encounter.
+
+Additionally, <a href='https://github.com/noerw/leaflet-sidebar-v2'>the  Leaflet Sidebar (v2) plugin </a> is utilized in charting more information about each report in the sidebar. This can be accessed by clicking on the marker popups, as is described by the hover-on 'Click for more info'. Relevant reported data includes the County, Date, Season, and the full, detailed report in paragraph format.
 
 ## Bigfoot Sighting Dashboard
 The webpage `dashboard.html` is an interactive dashboard that shows the number of Bigfoot sightings in each county of each state. There is also a static graph of the number of Bigfoot sightings each season. 
